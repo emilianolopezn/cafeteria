@@ -135,4 +135,25 @@ class PedidoController extends Controller
     {
         //
     }
+
+    public function colaPedidos() {
+        $pedidos = \App\Pedido::all();
+        $correos = \App\User::all()->pluck('email','id');
+        foreach($pedidos as $pedido) {
+            $elementos = \App\ElementoPedido::where('idPedido','=',$pedido->id)->get();
+            $pedido["elementos"] = $elementos;
+        }
+        $argumentos = array();
+        $argumentos["pedidos"] = $pedidos;
+        $argumentos["correos"] = $correos;
+
+        return view('pedidos.cola', $argumentos);
+    }
+
+    public function prepararPedido($idPedido) {
+        $pedido = \App\Pedido::where('id','=',$idPedido)->first();
+        $pedido->idEstadoPedido = 2;
+        $pedido->save();
+        return redirect()->route('pedidos.cola');
+    }
 }

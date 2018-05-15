@@ -18,6 +18,12 @@ Route::get('/', ["uses" => 'HomeController@index', 'as' => 'index']);
 Route::resource('usuarios', 'UsuarioController');
 Route::resource('comidas', 'ComidaController');
 Route::resource('pedidos','PedidoController');
+Route::get('/colapedidos',
+    ["uses" => 'PedidoController@colaPedidos', 
+    'as' => 'pedidos.cola']);
+Route::get('/preparapedido/{idPedido}',
+    ["uses" => 'PedidoController@prepararPedido', 
+    'as' => 'pedidos.preparar']);
 
 //Rutas de la api
 Route::get('/api/comidas',
@@ -27,3 +33,7 @@ Route::get('/api/comidas',
 Route::get('/api/pedidos/{idUsuario}',
     ['uses' => 'PedidoApiController@getPedidosUsuario',
     'as' => 'api.pedidos.getpedidosusuario']);
+
+Route::post('/api/login',
+    ['uses' => 'LoginApiController@login',
+    'as' => 'api.login']);
